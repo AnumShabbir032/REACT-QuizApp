@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 
-import { Grid, Paper, Typography } from "@mui/material";
+import { Grid, Paper, Typography, Button } from "@mui/material";
 import { Box } from "@mui/material";
 // import Timer from "./Timer";
+
+import Slider from '@mui/material/Slider';
+
 
 import '../App.css';
 
@@ -118,6 +121,9 @@ function Quiz() {
     const [indexNumber, setIndexNumber] = useState(0);
     const [score, setScore] = useState(0);
     const [showResult, setShowResult] = useState(false);
+    // const [showQuiz, setShowQuiz] = useState(false);
+
+
     let checkQuestion = (a, b) => {
         if (a == b) {
             setScore(score + 1);
@@ -127,17 +133,21 @@ function Quiz() {
         } else {
             setIndexNumber(indexNumber + 1);
         }
-
+        setCounter(10)
 
     };
+
+    // let quizHandler = () => {
+    //     setShowQuiz(true);
+    // }
 
 
 
     useEffect(() => {
-// if (counter === 0){
-//     questions[indexNumber].question - 1
-// }
-
+        if (counter === 0) {
+            setIndexNumber(indexNumber + 1);
+            setCounter(10)
+        }
 
         const timer =
             counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
@@ -151,132 +161,147 @@ function Quiz() {
 
     return (
 
-        <Box className="box1" sx={{
-            m: 1, height: "650px", width: "80%", display: "flex", flexDirection: "column",
-            justifyContent: "center", color: "black"
-        }}>
+        // {(showQuiz === false) ?  <Box><Button onClick={quizHandler}> StartQuiz </Button></Box> :
 
-
-            '
-            {/* Heading */}
-            <Typography variant="h2" sx={{ textAlign: "center", color: "black", padding: "20px" }}>
-                React Quiz
-            </Typography>
-
-            {/* Heading End */}
-
-
-            {/* Main Box Start */}
-
-
-
-            {showResult ? <Box sx={{
-                border: "5px solid black", display: "flex", width: "80%", margin: "auto", height: "350px",
-                flexDirection: "column", alignContent: "center", alignItems: "center",
-                justifyContent: " space-evenly"
+            <Box className="box1" sx={{
+                m: 1, height: "650px", width: "80%", display: "flex", flexDirection: "column",
+                justifyContent: "center", color: "black"
             }}>
 
-                {/* Ressult Card  */}
+
+                '
+                {/* Heading */}
+                <Typography variant="h2" sx={{ textAlign: "center", color: "black", padding: "20px" }}>
+                    React Quiz
+                </Typography>
+
+                {/* Heading End */}
 
 
-                <Box> <progress className="p-3" id="file" value={score} max={questions.length}></progress>
-                </Box>
-
-                <Box>
-                    <Typography variant="h5">
-                        Correct answers is {(score)} out of 10
-                    </Typography>
-                </Box>
-
-                <Box>
-                    <Typography variant="h5">
-                        Your percentage is {((score / questions.length) * 100).toFixed(2)} %
-                    </Typography>
-                </Box>
-
-                <Box>
-                    <Typography variant="h5">
-                        {(score / questions.length) * 100 < 60 ? "Fail 😞" : "Pass 🤗"}{" "}
-                    </Typography>
-                </Box>
+                {/* Main Box Start */}
 
 
 
-
-
-            </Box> : <Box sx={{
-                border: "5px solid black", borderRadius: "15px", m: 1, p: "10px", height: "450px", display: "flex",
-                alignItems: "center", flexDirection: "column"
-            }}>
-
-                {/* Counter Box */}
-                <Box sx={{
-                    fontFamily: "Roboto", display: "flex", justifyContent: " space-between",
-                    width: "100%", alignItems: "center"
+                {showResult ? <Box sx={{
+                    border: "5px solid black", display: "flex", width: "80%", margin: "auto", height: "350px",
+                    flexDirection: "column", alignContent: "center", alignItems: "center",
+                    justifyContent: " space-evenly"
                 }}>
 
+                    {/* Ressult Card  */}
 
-                    <Typography variant="h6" sx={{ display: "flex", alignItems: " center" }}>
-                        <Typography variant="h4" sx={{ m: 0 }}>  Question no   {indexNumber + 1}/ </Typography>  {questions.length}
-                    </Typography>
 
                     <Box>
-                        <Typography variant="h5">
-                        Countdown: {counter}
-                        </Typography>
+                        {/* <progress className="p-3" id="file" value={score} max={questions.length}></progress> */}
+                        <Slider
+                            value={score}
+                            max={questions.length}
+                            sx={{
+                                width: 300,
+                                color: 'success.main',
+                            }}
+                        />
+
 
                     </Box>
 
-                </Box>
-                {/* Counter Box */}
+                    <Box>
+                        <Typography variant="h5">
+                            Correct answers is {(score)} out of 10
+                        </Typography>
+                    </Box>
 
-                {/* question Box */}
-                <Box sx={{ height: "100px", width: "97%", padding: "10px", margin: "10px" }}>
+                    <Box>
+                        <Typography variant="h5">
+                            Your percentage is {((score / questions.length) * 100).toFixed(2)} %
+                        </Typography>
+                    </Box>
 
-                    <Typography variant="h5">
-                        {questions[indexNumber].question}
-                    </Typography>
-
-                </Box>
-                {/* question Box  End*/}
-
-
-
-                {/* Option box */}
-                <Box>
-                    <Grid container>
-                        {questions[indexNumber].options.map((e, i) => {
-                            return (
-                                <Grid key={i} item md={6}>
-                                    <Paper sx={{ height: "75px", width: "100%", textAlign: "center", backgroundColor: "black" }}>
-
-                                        <button className="buttons"
-                                            onClick={() => checkQuestion(e, questions[indexNumber].correctAns)}
-                                            label={e}>
-                                            {e}
-                                        </button>
-                                    </Paper>
-                                </Grid>
-                            );
-                        })}
-
-
-                    </Grid>
-
-
-                </Box>
+                    <Box>
+                        <Typography variant="h5">
+                            {(score / questions.length) * 100 < 60 ? "Fail 😞" : "Pass 🤗"}{" "}
+                        </Typography>
+                    </Box>
 
 
 
 
-            </Box>}
 
-            
+                </Box> : <Box sx={{
+                    border: "5px solid black", borderRadius: "15px", m: 1, p: "10px", height: "450px", display: "flex",
+                    alignItems: "center", flexDirection: "column"
+                }}>
+
+                    {/* Counter Box */}
+                    <Box sx={{
+                        fontFamily: "Roboto", display: "flex", justifyContent: " space-between",
+                        width: "100%", alignItems: "center"
+                    }}>
+
+
+                        <Typography variant="h6" sx={{ display: "flex", alignItems: " center" }}>
+                            <Typography variant="h4" sx={{ m: 0 }}>  Question no   {indexNumber + 1}/ </Typography>  {questions.length}
+                        </Typography>
+
+                        <Box>
+                            <Typography variant="h5">
+                                Countdown: {counter}
+                            </Typography>
+
+                        </Box>
+
+                    </Box>
+                    {/* Counter Box */}
+
+                    {/* question Box */}
+                    <Box sx={{ height: "100px", width: "97%", padding: "10px", margin: "10px" }}>
+
+                        <Typography variant="h5">
+                            {questions[indexNumber].question}
+                        </Typography>
+
+                    </Box>
+                    {/* question Box  End*/}
+
+
+
+                    {/* Option box */}
+                    <Box>
+                        <Grid container>
+                            {questions[indexNumber].options.map((e, i) => {
+                                return (
+                                    <Grid key={i} item md={6}>
+                                        <Paper sx={{ height: "75px", width: "100%", textAlign: "center", backgroundColor: "black" }}>
+
+                                            <button className="buttons"
+                                                onClick={() => checkQuestion(e, questions[indexNumber].correctAns)}
+                                                label={e}>
+                                                {e}
+                                            </button>
+                                        </Paper>
+                                    </Grid>
+                                );
+                            })}
+
+
+                        </Grid>
+
+
+                    </Box>
 
 
 
 
-        </Box >
+                </Box>}
+
+
+
+
+
+
+            </Box >
+
+                        // }
 
     );
 }
